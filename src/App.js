@@ -1,25 +1,55 @@
-import logo from './logo.svg';
+import React from "react";
+//import { useStateValue } from "./StateProvider";
+import { Login } from "./features";
+import SpotifyAuthService from "./services/SpotifyAuthService";
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+class App extends React.PureComponent {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      token: '',
+    }
+  }
+
+  componentDidMount() {
+    this.getToken();
+  }
+
+  getToken() {
+    const service= SpotifyAuthService;
+    const api = service.getSpotifyApi();
+    const hash = service.getTokenFromResponse();
+    console.log("token: ", hash);
+
+    window.location.hash = "";
+    let _token = hash.access_token;
+
+    if (_token) {
+      api.setAccessToken(_token);
+
+      this.setState({
+        token: _token.access_token,
+      });
+    }
+  }
+
+  render() {
+
+    return (
+      <>
+        {
+          this.state.token === "" ? (
+            <Login />
+          ) : (
+            <h1>YOU LOGGED IN</h1>
+          )
+        }
+      </>
+    );
+  }
 }
 
 export default App;
