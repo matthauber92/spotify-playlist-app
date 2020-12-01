@@ -1,9 +1,15 @@
 import React from "react";
-//import { useStateValue } from "./StateProvider";
-import { Login } from "./features";
+import PropTypes from 'prop-types';
+import { BrowserRouter } from 'react-router-dom';
+import { connect } from "react-redux";
+import { Route, Switch } from "react-router";
+import { Login, Player } from "./features";
 import SpotifyAuthService from "./services/SpotifyAuthService";
+import spotifyActions from "./actions"
 import './App.css';
 
+const service = SpotifyAuthService;
+const api = service.getSpotifyApi();
 
 class App extends React.PureComponent {
 
@@ -18,11 +24,17 @@ class App extends React.PureComponent {
     this.getToken();
   }
 
+  componentDidUpdate(prevProps) {
+    console.log(prevProps)
+    if(prevProps.location.hash !== "" && prevProps.location.pathname == "/") {
+      const { history } = this.props;
+      history.push('player');
+      console.log('to next component!!!');
+    }
+  }
+
   getToken() {
-    const service= SpotifyAuthService;
-    const api = service.getSpotifyApi();
     const hash = service.getTokenFromResponse();
-    console.log("token: ", hash);
 
     window.location.hash = "";
     let _token = hash.access_token;
@@ -30,26 +42,54 @@ class App extends React.PureComponent {
     if (_token) {
       api.setAccessToken(_token);
 
+      const user = this.props.dispatch(spotifyActions.GetCurrentUser());
+
       this.setState({
-        token: _token.access_token,
+        token: _token,
       });
     }
   }
 
   render() {
-
     return (
       <>
-        {
-          this.state.token === "" ? (
-            <Login />
-          ) : (
-            <h1>YOU LOGGED IN</h1>
-          )
-        }
+        <BrowserRouter>
+          <Switch>
+            <Route path="/" component={Login} />
+            <Route path="/player" component={Player} />
+          </Switch>
+        </BrowserRouter>
       </>
     );
   }
 }
 
-export default App;
+function mapStateToProps(state) {
+  const { user } = state.AccountState;
+  return {
+    user
+  };
+}
+
+App.propTypes = {
+  dispatch: () => {},
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }),
+  user: PropTypes.shape({
+    display_name: "",
+  }),
+};
+
+App.defaultProps = {
+  dispatch: () => {},
+  history: {
+    push: () => {},
+  },
+  user: {},
+};
+
+// eslint-disable-next-line max-len
+const connectedApp = connect(mapStateToProps)(App);
+
+export default connectedApp;

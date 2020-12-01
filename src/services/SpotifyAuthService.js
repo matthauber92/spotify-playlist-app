@@ -2,7 +2,7 @@
 // documentation/web-playback-sdk/quick-start/#
 import SpotifyWebApi from "spotify-web-api-js";
 
-export const authEndpoint = "https://accounts.spotify.com/authorize";
+const authEndpoint = "https://accounts.spotify.com/authorize";
 
 const redirectUri = "http://localhost:3000/";
 
