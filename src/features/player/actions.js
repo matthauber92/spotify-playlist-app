@@ -10,6 +10,9 @@ function GetCurrentUser() {
   function success(user) {
     return { type: c.GET_USER_SUCCESS, user };
   }
+  function failure(error) {
+    return { type: c.GET_USER_FAILURE, error };
+  }
 
   return (dispatch) => {
     dispatch(request());
@@ -17,8 +20,28 @@ function GetCurrentUser() {
         dispatch(success(user));
       },
       (error) => {
-        console.log(error.toString());
-        //dispatch(failure(error.toString()));
+        dispatch(failure(error.toString()));
+      },
+    );
+  };
+}
+
+function GetUserPlaylists() {
+  function request() { return { type: c.GET_PLAYLISTS_REQUEST }; }
+  function success(playlists) {
+    return { type: c.GET_PLAYLISTS_SUCCESS, playlists };
+  }
+  function failure(error) {
+    return { type: c.GET_PLAYLISTS_FAILURE, error };
+  }
+
+  return (dispatch) => {
+    dispatch(request());
+    api.getUserPlaylists().then((playlists) => {
+        dispatch(success(playlists));
+      },
+      (error) => {
+        dispatch(failure(error.toString()));
       },
     );
   };
@@ -37,5 +60,6 @@ function GetSessionToken(token) {
 
 export default ({
   GetCurrentUser,
+  GetUserPlaylists,
   GetSessionToken,
 });

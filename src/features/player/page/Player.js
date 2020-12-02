@@ -11,16 +11,12 @@ const service = SpotifyAuthService;
 const api = service.getSpotifyApi();
 
 class Player extends React.PureComponent {
-
   constructor(props) {
     super(props);
     this.state = {
-      user: {},
-      playlists: [],
       token: '',
     }
   }
-
   componentDidMount() {
     this.getToken();
   }
@@ -36,6 +32,7 @@ class Player extends React.PureComponent {
       api.setAccessToken(_token);
       this.props.dispatch(spotifyActions.GetCurrentUser());
       this.props.dispatch(spotifyActions.GetSessionToken(_token));
+      this.props.dispatch(spotifyActions.GetUserPlaylists());
 
       this.setState({
         token: _token,
@@ -59,17 +56,17 @@ class Player extends React.PureComponent {
 }
 
 function mapStateToProps(state) {
-  const { user } = state.AccountState;
+  console.log("player: ", state)
+  const { user, playlists } = state.AccountState;
   return {
-    user
+    user,
+    playlists,
   };
 }
 
 Player.propTypes = {
   dispatch: () => {},
-  user: PropTypes.shape({
-    display_name: "",
-  }),
+  user: PropTypes.shape({}),
 };
 
 Player.defaultProps = {

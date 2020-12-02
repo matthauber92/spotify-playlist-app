@@ -1,35 +1,15 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { push } from "connected-react-router";
 import "antd/dist/antd.css";
 import { Layout, Menu } from "antd";
 import { faUser, faRecordVinyl, faMusic } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import SpotifyAuthService from "../../../services/SpotifyAuthService";
 import navigationActions from "../navigation/action";
+import accountActions from "../../../features/player/actions";
 import "./SideNav.scss";
 
-const service = SpotifyAuthService;
-const api = service.getSpotifyApi();
-
 class SideNav extends React.PureComponent {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      playlists: [],
-    }
-  }
-
-  componentDidMount() {
-    api.getUserPlaylists().then((playlists) => {
-      console.log("playlists: ", playlists);
-      this.setState({
-        playlists: playlists,
-      });
-    });
-  }
 
   onCollapse = (collapsed) => {
     this.props.dispatch(navigationActions.collapseSideNav(collapsed));
@@ -85,7 +65,7 @@ class SideNav extends React.PureComponent {
           onSelect={(k) => this.handleSelect(k)}
         >
           <Menu.Item key="user" icon={UserIcon}>
-            <span>User</span>
+            <span>{this.props.user.display_name}</span>
           </Menu.Item>
           <SubMenu
             key="playlists"
@@ -93,8 +73,8 @@ class SideNav extends React.PureComponent {
             title="Playlists"
             className="playlists-submenu"
           >
-          {this.state.playlists?.items?.map((playlist, index) => (
-            <Menu.Item key={`playlist-${index}`} icon={songIcon}>
+          {this.props.playlists?.items?.map((playlist, index) => (
+            <Menu.Item id={`playlist-${playlist.id}`} key={`playlist-${playlist.id}`} icon={songIcon}>
               <span>{playlist.name}</span>
             </Menu.Item>
           ))}
@@ -108,18 +88,26 @@ class SideNav extends React.PureComponent {
 SideNav.propTypes = {
   dispatch: PropTypes.func,
   currentPage: PropTypes.string,
+  user: PropTypes.shape({}),
+  playlists: PropTypes.shape({}),
 };
 
 SideNav.defaultProps = {
   dispatch: () => {},
   currentPage: "",
+  user: {},
+  playlists: {},
 };
 
 function mapStateToProps(state) {
+  const { user, playlists } = state.AccountState;
+  console.log("state: ", state);
   const { currentPage, isCollapsed } = state.Navigation;
   return {
     currentPage,
     isCollapsed,
+    user,
+    playlists,
   };
 }
 
