@@ -1,4 +1,4 @@
-import SpotifyAuthService from "./services/SpotifyAuthService";
+import SpotifyAuthService from "../../services/SpotifyAuthService";
 import c from './constants';
 
 
@@ -24,6 +24,18 @@ function GetCurrentUser() {
   };
 }
 
+function GetSessionToken(token) {
+  function request() { return { type: c.GET_TOKEN_REQUEST }; }
+  function success(token) {
+    return { type: c.GET_TOKEN_SUCCESS, token };
+  }
+  return (dispatch) => {
+    dispatch(request());
+    dispatch(success(token));
+  }
+}
+
 export default ({
   GetCurrentUser,
+  GetSessionToken,
 });

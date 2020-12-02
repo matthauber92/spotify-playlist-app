@@ -1,0 +1,67 @@
+$primaryColor:#243b53;
+$secondaryColor:#EF4E4E;
+$NavItemFontColor: rgba(0, 0, 0, 0.65);
+$sliderBGColor: #F0F4F8;
+$sliderFontSize: 18px;
+
+.ant-layout-sider {
+    background: $sliderBGColor;
+    width: 20%;
+    height: 100vh;
+    box-shadow: 0 0 3px 1px rgba(0,0,0,.2)
+  }
+
+.ant-layout-sider-trigger {
+    background-color: $primaryColor;
+    color: #fff;
+  }
+
+.ant-layout-sider-children > .ant-menu {
+      background-color: transparent;
+      margin-top: 20%;
+      padding-left: 5px
+  }
+
+.ant-layout-sider-children > .ant-menu > .ant-menu-item-selected {
+    background-color: #dfe5eb;
+    color:  $NavItemFontColor;
+    border-left: 3px solid $secondaryColor
+}
+
+.ant-layout-sider-children > .ant-menu > .ant-menu-item-active {
+    color:  $secondaryColor;
+    .side-nav-icon {
+        color:  $secondaryColor;
+    }
+}
+
+.ant-layout-sider-children > .ant-menu > .ant-menu-item::after {
+    border-right: none;
+}
+
+.ant-layout-sider-children > .ant-menu > li {
+    font-size: $sliderFontSize;
+}
+
+.side-nav-icon {
+    font-size: $sliderFontSize;
+    color: $NavItemFontColor;
+}
+
+// .ant-layout-sider-children > .ant-menu.ant-menu-inline-collapsed {
+//     // border-right: 2px solid $primaryColor;
+// }
+
+.anticon > .device-mgmt-icon {
+    margin-left: 7px;
+    margin-right: 5px;
+
+}
+
+.tecsos-submenu > .ant-menu-submenu-title:hover {
+    color: $secondaryColor;
+
+    > .anticon > .side-nav-icon {
+        color: $secondaryColor;
+    }
+}

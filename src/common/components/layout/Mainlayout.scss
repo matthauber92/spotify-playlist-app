@@ -1,0 +1,91 @@
+$primaryColor:#243b53;
+$secondaryColor:#EF4E4E;
+$NavItemFontColor: #F0F4F8;
+// $sliderBGColor: #F0F4F8;
+$topFontSize: 24px;
+
+.MainContainer > .ant-layout {
+  min-height: 100vh;
+}
+.ant-layout-header {
+  min-height: 100px;
+  background-color: #243b53;
+  color: #fff;
+}
+.ant-layout-content {
+  background-color: #F0F4F8;
+}
+.logo-container {
+    float:left;
+    margin: 1.5vh 0;
+    height: 8vh;
+    max-width: 200px;
+}
+.top-nav-items {
+    max-width: 500px;
+    float:right;
+    margin: 1.5vh 0;
+    height: 8vh;
+
+    > .ant-menu {
+        background-color: #243b53;
+        color: white;
+        border: none;
+
+        > .ant-menu-item-active {
+            color:  $secondaryColor;
+            border-bottom: 1px solid $secondaryColor;
+        }
+
+        > .ant-menu-submenu-active {
+            color:  $secondaryColor;
+            border-bottom: 1px solid $secondaryColor;
+
+            > .ant-menu-submenu-title {
+              color:  $secondaryColor;
+            }
+        }
+
+    }
+
+    > .ant-menu > .ant-menu-item::after {
+        border-bottom: 1px solid $secondaryColor;
+    }
+
+    > .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item {
+        margin: 0 5px;
+    }
+
+    > .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu {
+        margin: 0 5px;
+    }
+}
+
+.ant-menu-horizontal > .ant-menu-item-selected {
+    border:none;
+}
+
+.ant-menu-horizontal > .ant-menu-submenu-selected {
+    border:none;
+
+}
+
+.top-nav-icon {
+    font-size: $topFontSize;
+    color: $NavItemFontColor;
+}
+.top-nav-secondary-icon {
+    font-size: 18px;
+    color: $NavItemFontColor;
+}
+
+#logoutBtn {
+    text-align: center;
+    border: none;
+    background:transparent;
+    font-size: 18px;
+}
+
+#logoutBtn:hover {
+    color: $secondaryColor;
+}
