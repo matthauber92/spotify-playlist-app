@@ -4,10 +4,7 @@ import { connect } from "react-redux";
 import { push } from "connected-react-router";
 import "antd/dist/antd.css";
 import { Layout, Menu } from "antd";
-import {
-  faUser,
-} from "@fortawesome/free-regular-svg-icons";
-import LibraryMusicIcon from "@material-ui/icons/LibraryMusic";
+import { faUser, faRecordVinyl, faMusic } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import SpotifyAuthService from "../../../services/SpotifyAuthService";
 import navigationActions from "../navigation/action";
@@ -18,9 +15,19 @@ const api = service.getSpotifyApi();
 
 class SideNav extends React.PureComponent {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      playlists: [],
+    }
+  }
+
   componentDidMount() {
     api.getUserPlaylists().then((playlists) => {
       console.log("playlists: ", playlists);
+      this.setState({
+        playlists: playlists,
+      });
     });
   }
 
@@ -46,9 +53,20 @@ class SideNav extends React.PureComponent {
     const playlistIcon = (
       <span className="anticon" role="img">
         <FontAwesomeIcon
-          icon={LibraryMusicIcon}
+          icon={faMusic}
           id="Playlist"
           alt="PlaylistIcon"
+          className="side-nav-icon"
+        />
+      </span>
+    );
+
+    const songIcon = (
+      <span className="anticon" role="img">
+        <FontAwesomeIcon
+          icon={faRecordVinyl}
+          id="Song"
+          alt="SongIcon"
           className="side-nav-icon"
         />
       </span>
@@ -75,9 +93,11 @@ class SideNav extends React.PureComponent {
             title="Playlists"
             className="playlists-submenu"
           >
-            <Menu.Item key="playlists" icon={playlistIcon}>
-              <span>Playlists</span>
+          {this.state.playlists?.items?.map((playlist, index) => (
+            <Menu.Item key={`playlist-${index}`} icon={songIcon}>
+              <span>{playlist.name}</span>
             </Menu.Item>
+          ))}
           </SubMenu>
         </Menu>
       </Sider>

@@ -16,11 +16,9 @@ class Player extends React.PureComponent {
     super(props);
     this.state = {
       user: {},
+      playlists: [],
+      token: '',
     }
-  }
-
-  componentDidUpdate() {
-    console.log(this.state.user);
   }
 
   componentDidMount() {
@@ -38,6 +36,10 @@ class Player extends React.PureComponent {
       api.setAccessToken(_token);
       this.props.dispatch(spotifyActions.GetCurrentUser());
       this.props.dispatch(spotifyActions.GetSessionToken(_token));
+
+      this.setState({
+        token: _token,
+      });
     }
   }
 
@@ -45,7 +47,11 @@ class Player extends React.PureComponent {
     return (
       <div className="player">
         <div className="player__body">
-          <Layout />
+          {
+            this.state.token !== "" && (
+              <Layout />
+            )
+          }
         </div>
       </div>
     );
