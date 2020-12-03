@@ -3,39 +3,21 @@ import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { Layout } from "../../../common/components"
-import SpotifyAuthService from "../../../services/SpotifyAuthService";
-import spotifyActions from "../actions"
+import { Spin } from "antd";
 import "./Player.css";
-
-const service = SpotifyAuthService;
-const api = service.getSpotifyApi();
 
 class Player extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      token: '',
-    }
+      loading: true,
+    };
   }
+
   componentDidMount() {
-    this.getToken();
-  }
-
-  getToken() {
-    const hash = service.getTokenFromResponse();
-
-    window.location.hash = "";
-    let _token = hash.access_token;
-
-    if (_token) {
-      // set user state && token
-      api.setAccessToken(_token);
-      this.props.dispatch(spotifyActions.GetCurrentUser());
-      this.props.dispatch(spotifyActions.GetSessionToken(_token));
-      this.props.dispatch(spotifyActions.GetUserPlaylists());
-
+    if (this.props.user !== null) {
       this.setState({
-        token: _token,
+        loading: false,
       });
     }
   }
@@ -44,11 +26,11 @@ class Player extends React.PureComponent {
     return (
       <div className="player">
         <div className="player__body">
-          {
-            this.state.token !== "" && (
-              <Layout />
-            )
-          }
+        {
+          this.state.loading ? (<div className="mx-auto"> <Spin size="large" /></div>) : (
+            <Layout />
+          )
+        }
         </div>
       </div>
     );
@@ -56,7 +38,6 @@ class Player extends React.PureComponent {
 }
 
 function mapStateToProps(state) {
-  console.log("player: ", state)
   const { user, playlists } = state.AccountState;
   return {
     user,

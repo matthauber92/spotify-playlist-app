@@ -5,8 +5,6 @@ import { Layout, Menu } from "antd";
 import { history } from '../../../store';
 import SideNav from "../side-nav";
 
-// eslint-disable require-default-props
-/* eslint react/prop-types: 0 */
 class MainLayout extends React.PureComponent {
 
   render() {

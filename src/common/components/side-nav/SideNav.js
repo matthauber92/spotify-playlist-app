@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import "antd/dist/antd.css";
-import { Layout, Menu } from "antd";
+import { Layout, Menu, Avatar } from "antd";
 import { faUser, faRecordVinyl, faMusic } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import navigationActions from "../navigation/action";
@@ -18,17 +18,6 @@ class SideNav extends React.PureComponent {
   render() {
     const { Sider } = Layout;
     const { SubMenu } = Menu;
-
-    const UserIcon = (
-      <span className="anticon" role="img">
-        <FontAwesomeIcon
-          icon={faUser}
-          id="Users"
-          alt="UserIcon"
-          className="side-nav-icon"
-        />
-      </span>
-    );
 
     const playlistIcon = (
       <span className="anticon" role="img">
@@ -64,7 +53,7 @@ class SideNav extends React.PureComponent {
           selectedKeys={[this.props.currentPage]}
           onSelect={(k) => this.handleSelect(k)}
         >
-          <Menu.Item key="user" icon={UserIcon}>
+          <Menu.Item key="user" icon={<Avatar size="small" src={this.props.user.images[0].url} />}>
             <span>{this.props.user.display_name}</span>
           </Menu.Item>
           <SubMenu
@@ -73,11 +62,18 @@ class SideNav extends React.PureComponent {
             title="Playlists"
             className="playlists-submenu"
           >
-          {this.props.playlists?.items?.map((playlist, index) => (
-            <Menu.Item id={`playlist-${playlist.id}`} key={`playlist-${playlist.id}`} icon={songIcon}>
-              <span>{playlist.name}</span>
-            </Menu.Item>
-          ))}
+          {
+            this.props.playlists?.items?.length > 0 ?
+            this.props.playlists?.items?.map((playlist, index) => (
+              <Menu.Item id={`playlist-${playlist.id}`} key={`playlist-${playlist.id}`} icon={songIcon}>
+                <span>{playlist.name}</span>
+              </Menu.Item>
+            )) : (
+              <Menu.Item id='playlist-empty' key='playlist-empty' icon={songIcon}>
+                <span>No PLaylists</span>
+              </Menu.Item>
+            )
+          }
           </SubMenu>
         </Menu>
       </Sider>
@@ -101,7 +97,6 @@ SideNav.defaultProps = {
 
 function mapStateToProps(state) {
   const { user, playlists } = state.AccountState;
-  console.log("state: ", state);
   const { currentPage, isCollapsed } = state.Navigation;
   return {
     currentPage,
@@ -114,5 +109,3 @@ function mapStateToProps(state) {
 const connectedSideNav = connect(mapStateToProps)(SideNav);
 
 export { connectedSideNav as default };
-
-// export { SideNav as default };

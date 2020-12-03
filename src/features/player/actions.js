@@ -1,3 +1,5 @@
+import { push } from 'connected-react-router';
+import { history } from '../../store';
 import SpotifyAuthService from "../../services/SpotifyAuthService";
 import c from './constants';
 
@@ -5,7 +7,7 @@ import c from './constants';
 const service = SpotifyAuthService;
 const api = service.getSpotifyApi();
 
-function GetCurrentUser() {
+function GetCurrentUser(token, callback) {
   function request() { return { type: c.GET_USER_REQUEST }; }
   function success(user) {
     return { type: c.GET_USER_SUCCESS, user };
@@ -18,6 +20,7 @@ function GetCurrentUser() {
     dispatch(request());
     api.getMe().then((user) => {
         dispatch(success(user));
+        history.push('/player');
       },
       (error) => {
         dispatch(failure(error.toString()));
