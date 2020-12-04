@@ -31,6 +31,7 @@ class App extends React.PureComponent {
         // }
       });
     const data = await response.json();
+    console.log(data);
     return data;
   }
 
@@ -41,13 +42,13 @@ class App extends React.PureComponent {
     let _token = hash.access_token;
 
     if (_token) {
-      const accessToken = this.getAccessToken(_token);
+      this.getAccessToken(_token);
       // set user state && token
       api.setAccessToken(_token);
-      this.props.dispatch(spotifyActions.GetSessionToken(_token));
-      localStorage.setItem('token', accessToken.access_token);
-      this.props.dispatch(spotifyActions.GetCurrentUser());
-      this.props.dispatch(spotifyActions.GetUserPlaylists());
+      this.props.dispatch(spotifyActions.SetSessionToken(_token));
+
+      this.props.dispatch(spotifyActions.SetCurrentUser());
+      this.props.dispatch(spotifyActions.SetUserPlaylists());
     }
   }
 

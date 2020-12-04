@@ -7,13 +7,13 @@ import c from './constants';
 const service = SpotifyAuthService;
 const api = service.getSpotifyApi();
 
-function GetCurrentUser() {
-  function request() { return { type: c.GET_USER_REQUEST }; }
+function SetCurrentUser() {
+  function request() { return { type: c.SET_USER_REQUEST }; }
   function success(user) {
-    return { type: c.GET_USER_SUCCESS, user };
+    return { type: c.SET_USER_SUCCESS, user };
   }
   function failure(error) {
-    return { type: c.GET_USER_FAILURE, error };
+    return { type: c.SET_USER_FAILURE, error };
   }
 
   return (dispatch) => {
@@ -29,13 +29,13 @@ function GetCurrentUser() {
   };
 }
 
-function GetUserPlaylists() {
-  function request() { return { type: c.GET_PLAYLISTS_REQUEST }; }
+function SetUserPlaylists() {
+  function request() { return { type: c.SET_PLAYLISTS_REQUEST }; }
   function success(playlists) {
-    return { type: c.GET_PLAYLISTS_SUCCESS, playlists };
+    return { type: c.SET_PLAYLISTS_SUCCESS, playlists };
   }
   function failure(error) {
-    return { type: c.GET_PLAYLISTS_FAILURE, error };
+    return { type: c.SET_PLAYLISTS_FAILURE, error };
   }
 
   return (dispatch) => {
@@ -50,10 +50,10 @@ function GetUserPlaylists() {
   };
 }
 
-function GetSessionToken(token) {
-  function request() { return { type: c.GET_TOKEN_REQUEST }; }
+function SetSessionToken(token) {
+  function request() { return { type: c.SET_TOKEN_REQUEST }; }
   function success(token) {
-    return { type: c.GET_TOKEN_SUCCESS, token };
+    return { type: c.SET_TOKEN_SUCCESS, token };
   }
   return (dispatch) => {
     dispatch(request());
@@ -62,7 +62,7 @@ function GetSessionToken(token) {
 }
 
 export default ({
-  GetCurrentUser,
-  GetUserPlaylists,
-  GetSessionToken,
+  SetCurrentUser,
+  SetUserPlaylists,
+  SetSessionToken,
 });
