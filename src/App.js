@@ -18,20 +18,15 @@ class App extends React.PureComponent {
   }
 
   getAccessToken = async (token) => {
-    const clientId = '969a3f38fc9645c188fb725ea8c85d2a';
-    const clientSecret = 'd8fab3c1438c42988b646d27ed2810a2';
-    let response = await fetch(service.getAccessToken(token), {
+    const response = await fetch(service.getAccessToken(token), {
         method: 'POST',
         headers: {
-          'Authorization': 'Basic ' + btoa(clientId + ':' + clientSecret),
+          'Authorization': 'Basic ' + btoa(service.clientId + ':' + service.clientSecret),
           'Content-Type':'application/x-www-form-urlencoded'
         },
-        // params: {
-        //   'grant_type': 'authorization_code',
-        // }
       });
     const data = await response.json();
-    console.log(data);
+    console.log(data)
     return data;
   }
 

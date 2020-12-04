@@ -4,13 +4,13 @@ import SpotifyWebApi from 'spotify-web-api-js';
 
 const authEndpoint = 'https://accounts.spotify.com/authorize';
 
-const refreshEndpoint = 'https://accounts.spotify.com/api/token';
+const accessEndpoint = 'https://accounts.spotify.com/api/token';
 
 const redirectUri = 'http://localhost:3000';
 
-const clientId = '969a3f38fc9645c188fb725ea8c85d2a';
+export const clientId = '969a3f38fc9645c188fb725ea8c85d2a';
 
-const clientSecret = 'd8fab3c1438c42988b646d27ed2810a2';
+export const clientSecret = 'd8fab3c1438c42988b646d27ed2810a2';
 
 const scopes = [
   "user-read-currently-playing",
@@ -38,7 +38,7 @@ function getTokenFromResponse() {
 };
 
 function getAccessToken(code) {
-  const accessUrl = `${refreshEndpoint}?code=${code}&grant_type=client_credentials&redirect_uri=${redirectUri}`;
+  const accessUrl = `${accessEndpoint}?code=${code}&grant_type=client_credentials&redirect_uri=${redirectUri}`;
   return accessUrl;
 }
 
@@ -54,4 +54,6 @@ export default {
   getAccessToken,
   getTokenFromResponse,
   getAuthUrl,
+  clientId,
+  clientSecret
 };
