@@ -4,11 +4,13 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { Layout } from "../../../common/components"
 import { Spin } from "antd";
+import SpotifyAuthService from "../../../services/SpotifyAuthService";
 import "./Player.css";
 
 class Player extends React.PureComponent {
   constructor(props) {
     super(props);
+    this.service = SpotifyAuthService;
     this.state = {
       loading: true,
     };
@@ -38,21 +40,25 @@ class Player extends React.PureComponent {
 }
 
 function mapStateToProps(state) {
-  const { user, playlists } = state.AccountState;
+  console.log('state', state)
+  const { user, playlists, token } = state.AccountState;
   return {
     user,
     playlists,
+    token,
   };
 }
 
 Player.propTypes = {
   dispatch: () => {},
   user: PropTypes.shape({}),
+  token: PropTypes.string,
 };
 
 Player.defaultProps = {
   dispatch: () => {},
   user: {},
+  token: '',
 };
 
 const connectedPlayer = withRouter(connect(mapStateToProps)(Player));

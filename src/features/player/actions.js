@@ -7,7 +7,7 @@ import c from './constants';
 const service = SpotifyAuthService;
 const api = service.getSpotifyApi();
 
-function GetCurrentUser(token, callback) {
+function GetCurrentUser() {
   function request() { return { type: c.GET_USER_REQUEST }; }
   function success(user) {
     return { type: c.GET_USER_SUCCESS, user };

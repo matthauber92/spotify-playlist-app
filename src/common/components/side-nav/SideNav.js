@@ -66,7 +66,7 @@ class SideNav extends React.PureComponent {
             this.props.playlists?.items?.length > 0 ?
             this.props.playlists?.items?.map((playlist, index) => (
               <Menu.Item id={`playlist-${playlist.id}`} key={`playlist-${playlist.id}`} icon={songIcon}>
-                <span>{playlist.name}</span>
+                <span className="sidebarOption">{playlist.name}</span>
               </Menu.Item>
             )) : (
               <Menu.Item id='playlist-empty' key='playlist-empty' icon={songIcon}>

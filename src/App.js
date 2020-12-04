@@ -17,6 +17,23 @@ class App extends React.PureComponent {
     this.getToken();
   }
 
+  getAccessToken = async (token) => {
+    const clientId = '969a3f38fc9645c188fb725ea8c85d2a';
+    const clientSecret = 'd8fab3c1438c42988b646d27ed2810a2';
+    let response = await fetch(service.getAccessToken(token), {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Basic ' + btoa(clientId + ':' + clientSecret),
+          'Content-Type':'application/x-www-form-urlencoded'
+        },
+        // params: {
+        //   'grant_type': 'authorization_code',
+        // }
+      });
+    const data = await response.json();
+    return data;
+  }
+
   getToken() {
     const hash = service.getTokenFromResponse();
 
@@ -24,12 +41,13 @@ class App extends React.PureComponent {
     let _token = hash.access_token;
 
     if (_token) {
+      const accessToken = this.getAccessToken(_token);
       // set user state && token
       api.setAccessToken(_token);
-
+      this.props.dispatch(spotifyActions.GetSessionToken(_token));
+      localStorage.setItem('token', accessToken.access_token);
       this.props.dispatch(spotifyActions.GetCurrentUser());
       this.props.dispatch(spotifyActions.GetUserPlaylists());
-      this.props.dispatch(spotifyActions.GetSessionToken(_token));
     }
   }
 
