@@ -53,7 +53,7 @@ class SideNav extends React.PureComponent {
           selectedKeys={[this.props.currentPage]}
           onSelect={(k) => this.handleSelect(k)}
         >
-          <Menu.Item key="user" icon={<Avatar size="small" src={this.props.user.images[0].url} />}>
+          <Menu.Item key="user">
             <span>{this.props.user.display_name}</span>
           </Menu.Item>
           <SubMenu

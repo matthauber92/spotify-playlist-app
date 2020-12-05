@@ -1,5 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { withRouter } from "react-router";
 import "antd/dist/antd.css";
 import { Layout, Menu } from "antd";
 import { history } from '../../../store';
@@ -13,19 +15,36 @@ class MainLayout extends React.PureComponent {
     return (
       <div className="MainContainer">
         <Layout>
-          <SideNav />
+          {
+            this.props.user && (
+              <SideNav />
+            )
+          }
         </Layout>
       </div>
     );
   }
 }
 
+function mapStateToProps(state) {
+  const { user } = state.AccountState;
+  return {
+    user,
+  };
+}
+
 MainLayout.propTypes = {
   dispatch: () => {},
+  user: PropTypes.shape({}),
 };
 
 MainLayout.defaultProps = {
   dispatch: () => {},
+  user: {},
 };
 
-export { MainLayout as default };
+const connectedLayout = withRouter(connect(mapStateToProps)(MainLayout));
+
+export default connectedLayout;
+
+// export { MainLayout as default };

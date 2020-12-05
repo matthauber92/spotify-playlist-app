@@ -50,7 +50,7 @@ function SetUserPlaylists() {
   };
 }
 
-function SetSessionToken(token) {
+function SetRefreshToken(token) {
   function request() { return { type: c.SET_TOKEN_REQUEST }; }
   function success(token) {
     return { type: c.SET_TOKEN_SUCCESS, token };
@@ -64,5 +64,5 @@ function SetSessionToken(token) {
 export default ({
   SetCurrentUser,
   SetUserPlaylists,
-  SetSessionToken,
+  SetRefreshToken,
 });

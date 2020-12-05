@@ -7,7 +7,7 @@ export const initialState = {
   spotify: null,
   playing: false,
   item: null,
-  token: null,
+  refresh_token: null,
 };
 
 export default function AccountReducer(state = initialState, action) {
@@ -51,13 +51,13 @@ export default function AccountReducer(state = initialState, action) {
     case spotifyConstants.SET_TOKEN_REQUEST:
       return {
         ...state,
-        token: "",
+        refresh_token: "",
       };
 
     case spotifyConstants.SET_TOKEN_SUCCESS:
       return {
         ...state,
-        token: action.token,
+        refresh_token: action.token,
       };
 
     case spotifyConstants.SET_SPOTIFY_REQUEST:
