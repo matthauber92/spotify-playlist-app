@@ -7,7 +7,7 @@ import c from './constants';
 const service = SpotifyAuthService;
 const api = service.getSpotifyApi();
 
-function SetCurrentUser() {
+function SetCurrentUser(token) {
   function request() { return { type: c.SET_USER_REQUEST }; }
   function success(user) {
     return { type: c.SET_USER_SUCCESS, user };
@@ -20,7 +20,6 @@ function SetCurrentUser() {
     dispatch(request());
     api.getMe().then((user) => {
         dispatch(success(user));
-        history.push('/player');
       },
       (error) => {
         dispatch(failure(error.toString()));

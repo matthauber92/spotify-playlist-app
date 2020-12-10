@@ -32,7 +32,15 @@ class Player extends React.PureComponent {
         },
       });
     const data = await response.json();
-    return data;
+
+    api.setAccessToken(data.access_token);
+    localStorage.setItem('refresh_token', data.refresh_token);
+    this.props.dispatch(spotifyActions.SetRefreshToken(data.refresh_token));
+    await this.props.dispatch(spotifyActions.SetCurrentUser(data.refresh_token));
+    await this.props.dispatch(spotifyActions.SetUserPlaylists());
+    this.setState({
+      loading: false,
+    });
   }
 
   getRefreshToken = async (token) => {
@@ -44,41 +52,33 @@ class Player extends React.PureComponent {
         },
       });
     const data = await response.json();
-    console.log('refresh', data)
-    console.log('localStorage: ', localStorage.getItem('refresh_token'))
     api.setAccessToken(data.access_token);
-    this.props.dispatch(spotifyActions.SetCurrentUser());
-    this.props.dispatch(spotifyActions.SetUserPlaylists());
+    localStorage.setItem('refresh_token', data.refresh_token);
+    this.props.dispatch(spotifyActions.SetRefreshToken(data.refresh_token));
+    await this.props.dispatch(spotifyActions.SetCurrentUser(data.refresh_token));
+    await this.props.dispatch(spotifyActions.SetUserPlaylists());
+    this.setState({
+      loading: false,
+    });
   }
 
-  getTokens() {
-    console.log(localStorage.getItem('refresh_token'))
-    if (localStorage.getItem('refresh_token') == undefined) {
-      const auth = service.getCodeFromResponse();
-      window.location.hash = "";
+  async getTokens() {
+      // debugger;
+      const auth = await service.getCodeFromResponse();
       let code = auth.code;
 
       if (code) {
-        const tokens = this.getAccessToken(code);
-        console.log('tokens: ', tokens.access_token);
-        api.setAccessToken(tokens.access_token);
-        localStorage.setItem('refresh_token', tokens.refresh_token);
-        console.log('localStorage: ', localStorage.getItem('refresh_token'))
-        this.props.dispatch(spotifyActions.SetRefreshToken(tokens.refresh_token));
-        this.props.dispatch(spotifyActions.SetCurrentUser());
-        this.props.dispatch(spotifyActions.SetUserPlaylists());
-
-        this.setState({
-          loading: false,
-        });
-      }
-    } else {
-      this.getRefreshToken(localStorage.getItem('refresh_token'));
-      this.setState({
-        loading: false,
-      });
+        await this.getAccessToken(code);
+      } else {
+      await this.getRefreshToken(localStorage.getItem('refresh_token'));
     }
   }
+
+  handleCallback = () => {
+    this.setState({
+      loading: false,
+    });
+  };
 
   render() {
     return (

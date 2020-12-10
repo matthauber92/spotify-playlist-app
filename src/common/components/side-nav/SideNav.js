@@ -5,11 +5,35 @@ import "antd/dist/antd.css";
 import { Layout, Menu, Avatar } from "antd";
 import { faUser, faRecordVinyl, faMusic } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import SpotifyAuthService from "../../../services/SpotifyAuthService";
 import navigationActions from "../navigation/action";
-import accountActions from "../../../features/player/actions";
+import spotifyActions from "../../../features/player/actions";
 import "./SideNav.scss";
 
+const service = SpotifyAuthService;
+const api = service.getSpotifyApi();
+
 class SideNav extends React.PureComponent {
+
+  componentDidMount() {
+    console.log(this.props.refresh_token)
+    this.getRefreshToken(this.props.refresh_token);
+  }
+
+  getRefreshToken = async () => {
+    const response = await fetch(service.getRefreshToken(localStorage.getItem('refresh_token')), {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Basic ' + btoa(service.clientId + ':' + service.clientSecret),
+          'Content-Type':'application/x-www-form-urlencoded'
+        },
+      });
+    const data = await response.json();
+    await api.setAccessToken(data.access_token);
+    this.props.dispatch(spotifyActions.SetRefreshToken(data.refresh_token));
+    this.props.dispatch(spotifyActions.SetCurrentUser());
+    this.props.dispatch(spotifyActions.SetUserPlaylists());
+  }
 
   onCollapse = (collapsed) => {
     this.props.dispatch(navigationActions.collapseSideNav(collapsed));
@@ -86,6 +110,7 @@ SideNav.propTypes = {
   currentPage: PropTypes.string,
   user: PropTypes.shape({}),
   playlists: PropTypes.shape({}),
+  refresh_token: PropTypes.string,
 };
 
 SideNav.defaultProps = {
@@ -93,16 +118,18 @@ SideNav.defaultProps = {
   currentPage: "",
   user: {},
   playlists: {},
+  refresh_token: '',
 };
 
 function mapStateToProps(state) {
-  const { user, playlists } = state.AccountState;
+  const { user, playlists, refresh_token } = state.AccountState;
   const { currentPage, isCollapsed } = state.Navigation;
   return {
     currentPage,
     isCollapsed,
     user,
     playlists,
+    refresh_token,
   };
 }
 

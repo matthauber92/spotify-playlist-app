@@ -11,7 +11,6 @@ class MainLayout extends React.PureComponent {
 
   render() {
     const { Header, Content } = Layout;
-
     return (
       <div className="MainContainer">
         <Layout>
